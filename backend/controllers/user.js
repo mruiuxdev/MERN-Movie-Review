@@ -2,9 +2,13 @@ const EmailVerificationToken = require("../models/emailVerificationToken");
 const User = require("../models/user");
 const { verifyEmailHTML } = require("../templates/verifyEmailHTML");
 const { isValidObjectId } = require("mongoose");
-const { welcomeEmailHTML } = require("../templates/WeclomeEmailHTML");
 const { generateOTP, generateMailTransporter } = require("../utils/mail");
-const { sendError } = require("../utils/helper");
+const { sendError, generateRandomBytes } = require("../utils/helper");
+const PasswordResetToken = require("../models/passwordResetToken");
+const {
+  resetPasswordEmailHTML,
+} = require("../templates/resetPasswordEmailHTML");
+const { welcomeEmailHTML } = require("../templates/welcomeEmailHTML");
 
 exports.create = async (req, res) => {
   const { name, email, password } = req.body;
@@ -100,11 +104,11 @@ exports.resendEmailVerification = async (req, res) => {
 
   if (user.isVerified) return sendError(res, "User is already verified!", 409);
 
-  const alreadyHaveToken = await EmailVerificationToken.findOne({
+  const alreadyHasToken = await EmailVerificationToken.findOne({
     owner: userId,
   });
 
-  if (alreadyHaveToken)
+  if (alreadyHasToken)
     return sendError(
       res,
       "You can only request verification again after one hour.",
@@ -138,5 +142,54 @@ exports.resendEmailVerification = async (req, res) => {
     .catch((err) => {
       console.log(err);
       sendError(res, "Failed to send verification email.", 500);
+    });
+};
+
+exports.forgetPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return sendError(res, "Email is missing!", 400);
+
+  const user = await User.findOne({ email });
+
+  if (!user) return sendError(res, "User is not found!", 404);
+
+  const alreadyHasToken = await PasswordResetToken.findOne({ owner: user._id });
+
+  if (alreadyHasToken)
+    return sendError(
+      res,
+      "You can only request verification again after one hour.",
+      429
+    );
+
+  const token = await generateRandomBytes();
+
+  const newPasswordResetToken = await PasswordResetToken({
+    owner: user._id,
+    token,
+  });
+
+  await newPasswordResetToken.save();
+
+  const resetPasswordUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}&id=${user._id}`;
+
+  var transport = generateMailTransporter();
+
+  transport
+    .sendMail({
+      from: "securiyty@moviereview.com",
+      to: user.email,
+      subject: "Reset Password",
+      html: resetPasswordEmailHTML(resetPasswordUrl),
+    })
+    .then(() => {
+      res.status(200).json({
+        message: "Please check your email to reset your password!",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      sendError(res, "Failed to send reset password email.", 500);
     });
 };
