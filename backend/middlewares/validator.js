@@ -9,15 +9,13 @@ exports.userValidator = [
     .isEmpty()
     .withMessage("Password is missing!")
     .isLength({ min: 8, max: 20 })
-    .withMessage("Password must be 8 to 20 characters log"),
+    .withMessage("Password must be 8 to 20 characters"),
 ];
 
 exports.validate = (req, res, next) => {
   const errors = validationResult(req).array();
 
-  if (errors.length) {
-    return res.json({ error: errors[0].msg });
-  }
+  if (errors.length) return res.status(401).json({ error: errors[0].msg });
 
   return next();
 };
