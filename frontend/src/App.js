@@ -1,10 +1,14 @@
-import { Button } from "flowbite-react";
+import SignIn from "./components/auth/SignIn";
+import SignUp from "./components/auth/SignUp";
+import { Menu } from "./components/user/Navbar";
 
 function App() {
   return (
-    <div>
-      <Button>Click me</Button>
-    </div>
+    <>
+      <Menu />
+      <SignIn />
+      {/* <SignUp /> */}
+    </>
   );
 }
 
