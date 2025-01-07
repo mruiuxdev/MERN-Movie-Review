@@ -6,8 +6,10 @@ import Logo from "../../logo.svg";
 const Menu = () => {
   return (
     <Navbar className="shadow-lg">
-      <Navbar.Brand href="https://flowbite-react.com">
-        <img src={Logo} className="mr-1 w-20" alt="Flowbite React Logo" />
+      <Navbar.Brand as="div">
+        <Link to="/">
+          <img src={Logo} className="mr-1 w-20" alt="Flowbite React Logo" />
+        </Link>
       </Navbar.Brand>
       <div className="flex  gap-2 md:order-2">
         <DarkThemeToggle />

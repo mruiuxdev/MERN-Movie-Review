@@ -10,14 +10,29 @@ const EmailVerification = () => {
 
   const inputRef = useRef();
 
+  const focusNextInputField = (i) => setActiveOTPIndex(i + 1);
+  const focusPrevInputField = (i) => {
+    let nextIndex;
+    const diff = i - 1;
+    nextIndex = diff !== 0 ? diff : 0;
+
+    setActiveOTPIndex(nextIndex);
+  };
+
   const handleOTPChange = ({ target }, i) => {
     const { value } = target;
 
     const newOtp = [...OTP];
     newOtp[i] = value.substring(value.length - 1, value.length);
 
+    if (!value) focusPrevInputField(i);
+    else focusNextInputField(i);
+
     setOTP([...newOtp]);
-    setActiveOTPIndex(i + 1);
+  };
+
+  const handleKeyDown = ({ key }, i) => {
+    if (key === "Backspace") focusPrevInputField(i);
   };
 
   useEffect(() => {
@@ -39,6 +54,7 @@ const EmailVerification = () => {
               value={OTP[i] || ""}
               onChange={(e) => handleOTPChange(e, i)}
               ref={activeOTPIndex === i ? inputRef : null}
+              onKeyDown={(e) => handleKeyDown(e, i)}
               className="w-10 h-11  border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg-gray-50 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 rounded-lg text-center text-md"
             />
           ))}
