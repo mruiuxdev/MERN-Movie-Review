@@ -1,4 +1,5 @@
 import { HiLockClosed, HiMail, HiUser } from "react-icons/hi";
+import { CustomLink } from "../CustomLink";
 import FormInput from "../form/FormInput";
 import Heading from "../form/Heading";
 import Submit from "../form/Submit";
@@ -24,18 +25,13 @@ const SignUp = () => {
             type="password"
             name="password"
             icon={HiLockClosed}
-            placeholder="******"
+            placeholder="Password"
           />
         </div>
         <Submit>Sign Up</Submit>
         <div className="text-center dark:text-white">
           Already have an account?{" "}
-          <a
-            href="#"
-            className="underline hover:text-cyan-700 transition-colors"
-          >
-            Sign in
-          </a>
+          <CustomLink to="/auth/sign-in">Sign in</CustomLink>
         </div>
       </form>
     </div>

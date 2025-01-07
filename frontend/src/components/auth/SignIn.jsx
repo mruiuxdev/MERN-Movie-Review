@@ -1,4 +1,5 @@
 import { HiLockClosed, HiMail } from "react-icons/hi";
+import { CustomLink } from "../CustomLink";
 import FormInput from "../form/FormInput";
 import Heading from "../form/Heading";
 import Submit from "../form/Submit";
@@ -21,23 +22,16 @@ const SignIn = () => {
             type="password"
             name="password"
             icon={HiLockClosed}
-            placeholder="******"
+            placeholder="Password"
           />
         </div>
         <div className="flex dark:text-white items-center justify-between gap-2">
-          <a href="#" className="hover:text-cyan-700 transition-colors">
-            Forget password?
-          </a>
+          <CustomLink to="/auth/forget-password">Forget password?</CustomLink>
         </div>
         <Submit>Sign In</Submit>
         <div className="text-center dark:text-white">
           Don't have an account?{" "}
-          <a
-            href="#"
-            className="underline hover:text-cyan-700 transition-colors"
-          >
-            Sign Up
-          </a>
+          <CustomLink to="/auth/sign-up">Sign Up</CustomLink>
         </div>
       </form>
     </div>

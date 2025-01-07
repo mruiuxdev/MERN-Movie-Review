@@ -1,8 +1,9 @@
 import { Button, DarkThemeToggle, Navbar, TextInput } from "flowbite-react";
 import { MdOutlineSearch } from "react-icons/md";
+import { Link } from "react-router-dom";
 import Logo from "../../logo.svg";
 
-export function Menu() {
+const Menu = () => {
   return (
     <Navbar className="shadow-lg">
       <Navbar.Brand href="https://flowbite-react.com">
@@ -17,8 +18,12 @@ export function Menu() {
           placeholder="Search"
           required
         />
-        <Button>Login</Button>
+        <Button as="div">
+          <Link to="/auth/sign-in">Sign In</Link>
+        </Button>
       </div>
     </Navbar>
   );
-}
+};
+
+export default Menu;
