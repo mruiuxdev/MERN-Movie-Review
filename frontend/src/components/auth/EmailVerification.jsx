@@ -32,7 +32,17 @@ const EmailVerification = () => {
   };
 
   const handleKeyDown = ({ key }, i) => {
-    if (key === "Backspace") focusPrevInputField(i);
+    if (key === "Backspace") {
+      const newOTP = [...OTP];
+
+      if (OTP[i]) {
+        newOTP[i] = "";
+      } else if (i > 0) {
+        setActiveOTPIndex(i - 1);
+      }
+
+      setOTP(newOTP);
+    }
   };
 
   useEffect(() => {

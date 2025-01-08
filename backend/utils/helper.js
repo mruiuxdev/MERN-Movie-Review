@@ -6,8 +6,8 @@ exports.sendError = (res, error, statusCode = 401) => {
 
 exports.generateRandomBytes = () => {
   return new Promise((resolve, reject) => {
-    crypto.randomBytes(30, (err, buff) => {
-      if (err) return reject(err);
+    crypto.randomBytes(30, (error, buff) => {
+      if (error) return reject(error);
 
       const bufferString = buff.toString("hex");
 
@@ -15,3 +15,5 @@ exports.generateRandomBytes = () => {
     });
   });
 };
+
+exports.notFoundError = (req, res) => this.sendError(res, "Not found!!", 404);
